@@ -22,7 +22,7 @@ Add the following configuration to your `_config.yml`:
 
 ~~~yaml
 
-gems = ['jekyll-emoji']
+gems: ['jekyll-emoji']
 emoji:
   format: emojione-svg # default html
   ascii: true # default false
