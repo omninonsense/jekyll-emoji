@@ -38,7 +38,7 @@ module Jekyll
       # This JSON file is nicked from the Emoji One project
       # Go shower them in love (not that kinda love :smirk:).
       emojione_json = nil
-      File.open('_plugins/emoji.json', 'r') do |f|
+      File.open(File.expand_path('../../../emoji.json', __FILE__), 'r') do |f|
         emojione_json ||= parser.parse(f)
       end
 
@@ -210,4 +210,3 @@ module Jekyll
 end
 
 Liquid::Template.register_filter(Jekyll::EmojiFilter)
-
