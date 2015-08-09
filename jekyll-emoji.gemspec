@@ -26,8 +26,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.10"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "jekyll"
+  spec.add_development_dependency "jekyll", "~> 2.0"
   spec.add_development_dependency "yajl-ruby"
   spec.add_development_dependency "oga", "~> 1.2.0"
-  spec.add_development_dependency "rspec"
 end
