@@ -72,7 +72,7 @@ module Jekyll
     def build_emoji_regexp
       return if @old_conf == @conf
 
-      valid = @encoding_map.values
+      valid = @encoding_map.keys
       valid += @shortname_aliases if @conf['shortname']
       valid += @ascii_aliases if @conf['ascii']
 
