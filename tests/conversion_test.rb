@@ -62,7 +62,7 @@ class TestConversion < MiniTest::Test
     assert_equal result2, @converter.convert(test2)
   end
 
-  def test_attr_blacklists
+  def test_node_blacklists
     test1 = %q{<code>:)</code>}
     result1 = %q{<code>:)</code>}
 
