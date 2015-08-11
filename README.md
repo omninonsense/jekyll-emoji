@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/omninonsense/jekyll-emoji.svg?branch=master)](https://travis-ci.org/omninonsense/jekyll-emoji)
 [![Gem Version](https://badge.fury.io/rb/jekyll-emoji.svg)](http://badge.fury.io/rb/jekyll-emoji)
 [![Code Climate](https://codeclimate.com/github/omninonsense/jekyll-emoji/badges/gpa.svg)](https://codeclimate.com/github/omninonsense/jekyll-emoji)
-[![Test Coverage](https://codeclimate.com/github/omninonsense/jekyll-emoji/badges/coverage.svg)](https://codeclimate.com/github/omninonsense/jekyll-emoji/coverage)
+[![Inline docs](http://inch-ci.org/github/omninonsense/jekyll-emoji.svg?branch=master)](http://inch-ci.org/github/omninonsense/jekyll-emoji)
 
 
 ## Installation
