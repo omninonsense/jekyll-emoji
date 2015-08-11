@@ -355,7 +355,7 @@ module Jekyll
       # won't be emojified. Check the `BLACKLIST_*`` constants, or the docs for
       # more information.
       #
-      # @param [String] convert
+      # @param [String] content
       # @return [String]
       #
       def convert(content)
