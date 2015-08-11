@@ -48,10 +48,6 @@ There's also a Liquid filter called `emojify`. It accepts three parameters: `for
 {{ ":kissing_heart: :heart: :stuck_out_tongue:" | emojify  }}
 ```
 
-## Development
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
 ## Known Issues
 
 ### `emojify` filter performance
@@ -74,10 +70,20 @@ When the `emojify` filter is used inside a markdown file (say, a blog post), and
 
 This is due to the fact that HTML encoding is done in a post-processing step to simplify and speed up the implementation.
 
+## Development
+
+To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/omninonsense/jekyll-emoji. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
 
+## Thanks
+
+The following parties deserve my gratitude:
+ - [Emoji One](http://emojione.com/) for creating emojis that I actually *like*, as opposed to not mind.
+ - [@YorickPeterse](https://github.com/YorickPeterse) for introducing me to [Oga](https://github.com/YorickPeterse).
+It was &lt;3&gt;&lt;/3&gt; at first sight!
 
 ## License
 

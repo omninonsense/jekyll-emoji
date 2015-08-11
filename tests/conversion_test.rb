@@ -26,10 +26,10 @@ class TestConversion < MiniTest::Test
 
   def test_svg
     @converter.reconfigure 'format' => 'emojione-svg'
-    img = %q{<img class="emojione" alt="3⃣" src="https://cdn.jsdelivr.net/emojione/assets/svg/0033-20E3.svg" />}
-    assert_equal img, @converter.convert("\u{0033}\u{20E3}")
-    assert_equal img, @converter.convert(":three:")
-    assert_equal "3", @converter.convert("3")
+    img = %q{the number <img class="emojione" alt="3⃣" src="https://cdn.jsdelivr.net/emojione/assets/svg/0033-20E3.svg" /> is smaller than 4}
+    assert_equal img, @converter.convert("the number \u{0033}\u{20E3} is smaller than 4")
+    assert_equal img, @converter.convert("the number :three: is smaller than 4")
+    assert_equal "the number 3 is smaller than 4", @converter.convert("the number 3 is smaller than 4")
   end
 
   def test_reconfiguring_aliases
