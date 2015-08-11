@@ -5,7 +5,7 @@ require_relative '../lib/jekyll-emoji'
 class TestConversion < MiniTest::Test
   def setup
     @converter = Jekyll::Emoji::Converter.new('emoji' => {
-      'format': 'html',
+      'format' => 'html',
       'ascii' => true,
       'shortname' => true
     })
@@ -26,7 +26,7 @@ class TestConversion < MiniTest::Test
 
   def test_svg
     @converter.reconfigure 'format' => 'emojione-svg'
-    img = %q{the number <img class="emojione" alt="3⃣" src="https://cdn.jsdelivr.net/emojione/assets/svg/0033-20E3.svg" /> is smaller than 4}
+    img = %Q{the number <img class="emojione" alt="3\u{20E3}" src="https://cdn.jsdelivr.net/emojione/assets/svg/0033-20E3.svg" /> is smaller than 4}
     assert_equal img, @converter.convert("the number \u{0033}\u{20E3} is smaller than 4")
     assert_equal img, @converter.convert("the number :three: is smaller than 4")
     assert_equal "the number 3 is smaller than 4", @converter.convert("the number 3 is smaller than 4")
