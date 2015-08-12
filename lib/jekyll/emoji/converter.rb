@@ -58,8 +58,8 @@ module Jekyll
       # @param [Hash] conf
       #
       def initialize(conf = {'emoji' => DEFAULTS})
-        @@site_conf = conf
-        configure(@@site_conf)
+        @initialized = false
+        configure(@initial_conf = conf)
 
         validate_format
 
@@ -71,8 +71,8 @@ module Jekyll
 
         load_emoji_data
         build_emoji_regexp
-
-        @encoding_regexp = Regexp.new (@encoding_map.keys.map{|k| Regexp.quote(k) }).join('|')
+        build_encoding_regexp
+        @initialized = true
       end
 
       ##
@@ -106,27 +106,119 @@ module Jekyll
         data = load_emoji_json(path)
 
         data.each do |v|
-          codepoints = v['unicode'].split('-')
+          codepoints = v['unicode']
           unicode = codepoints_to_unicode(codepoints)
 
-          @shortname_aliases << v['shortname']
-          @emoji_map[v['shortname']] = v['unicode']
+          add_shortname_alias(v['shortname'], codepoints)
+          v['aliases'].each {|a| add_shortname_alias(a, codepoints) }
+          v['aliases_ascii'].each {|a| add_ascii_alias(a, codepoints) }
 
-          v['aliases'].each do |emoji_alias|
-            @shortname_aliases << emoji_alias
-            @emoji_map[emoji_alias] = v['unicode']
-          end
-
-          v['aliases_ascii'].each do |emoji_alias|
-            @ascii_aliases << emoji_alias
-            @emoji_map[emoji_alias] = v['unicode']
-          end
-
-          @encoding_map[unicode] = codepoints.map{|cp| "&#x#{cp};" }.join
-          @emoji_map[unicode] = v['unicode']
+          map_emoji(unicode, codepoints)
+          map_encoding(unicode, codepoints)
         end
 
         return nil
+      end
+
+      ##
+      # Map an key to an HTML Entity string for faster encoding.
+      # The keys also serve as an array of strings used in the emoji regexp.
+      #
+      # - `k` is the unicode string
+      # - `v` is a dash(`-`)-delimited string of hex-formated codepoints
+      #
+      # @param [String] k
+      # @param [String] v
+      #
+      def map_encoding(k, v)
+        @encoding_map[k] = v.split('-').map{|cp| "&#x#{cp};" }.join
+
+        build_encoding_regexp if @initialized
+      end
+
+      ##
+      # Add an emoji to the map of all supported emojis.
+      # - `k` is an string corresponding to the emoji.
+      # - `v` is a dash(`-`)-delimited string of hex-formated codepoints.
+      #
+      # Returns true if the key was added, false if it already existed.
+      #
+      # @example
+      #   conv = Converter.new()
+      #   conv.map_emoji("\u{1F609}", '1F609')
+      #
+      #
+      # **NOTE**: Keys added through `map_encoding`, `map_emoji`,
+      # `add_shortname_alias`, and `add_ascii_alias` are all used in the same
+      # fashion during the lookup of the emoji. So, the code below would work,
+      # but the `:wink:` key would be added to the wrong lookup table, which
+      # would mean this key wouldn't be converted to an emoji if ASCII keys
+      # were disabled.
+      #
+      # This is a design choice added on purpose to allow addition of different
+      # types of emoji aliases, which aren't limited to `:shortcode` or the
+      # traditional smiley faces (`:)`, or `:P`), but also allowing the ability
+      # to toggle them off if needed.
+      #
+      # @example
+      #   conv = Converter.new()
+      #   conv.add_ascii_alias(":wink:", '1F609')
+      #
+      #
+      # @param [String] k
+      # @param [String] v
+      # @return [FalseClass|TrueClass]
+      #
+      def map_emoji(k, v)
+        return false if @emoji_map.has_key? k
+        @emoji_map[k] = v
+
+        build_emoji_regexp if @initialized
+        return true
+      end
+
+      ##
+      # Add a shortname alias for an emoji
+      # Used similarly to `map_emoji`, except that `k` is a string alias:
+      #
+      # Returns true if the key was added, false if it already existed.
+      #
+      # @example
+      #   conv = Converter.new()
+      #   conv.add_shortname_alias(":wink:", '1F609')
+      #
+      # @param [String] k
+      # @param [String] v
+      # @return [FalseClass|TrueClass]
+      #
+      def add_shortname_alias(emoji_alias, codepoints)
+        return false unless map_emoji(emoji_alias, codepoints)
+        @shortname_aliases << emoji_alias
+
+        build_emoji_regexp if @initialized
+        return true
+      end
+
+      ##
+      # Add an ASCII alias for an emoji
+      # Used similarly to `add_shortname_alias`.
+      #
+      # Returns true if the key was added, false if it already existed.
+      #
+      # @example
+      #   conv = Converter.new()
+      #   conv.add_shortname_alias(";-)", '1F609')
+      #
+      # @param [String] k
+      # @param [String] v
+      # @return [FalseClass|TrueClass]
+      #
+      def add_ascii_alias(emoji_alias, codepoints)
+        return false unless map_emoji(emoji_alias, codepoints)
+        @ascii_aliases << emoji_alias
+
+        build_emoji_regexp if @initialized
+        return true
       end
 
       ##
@@ -151,14 +243,18 @@ module Jekyll
       # @param [Hash|NilClass]
       # @return [Regexp]
       #
-      def build_emoji_regexp(previous_conf = nil)
-        return if previous_conf == @conf
+      def build_emoji_regexp(oc = nil)
+        return if oc['ascii'] == @conf['ascii'] && oc['shortname'] == @conf['shortname'] unless oc.nil?
 
         valid = @encoding_map.keys
         valid += @shortname_aliases if @conf['shortname']
         valid += @ascii_aliases if @conf['ascii']
 
         @emoji_regexp = Regexp.union(valid)
+      end
+
+      def build_encoding_regexp
+        @encoding_regexp = Regexp.new (@encoding_map.keys.map{|k| Regexp.quote(k) }).join('|')
       end
 
       ##
@@ -183,7 +279,7 @@ module Jekyll
       #
       def reconfigure(h)
         previous_conf = @conf
-        @conf = configure(@@site_conf).merge(h){|k, o, n| n.nil? ? o : n }
+        @conf = configure(@initial_conf).merge(h){|k, o, n| n.nil? ? o : n }
         validate_format
         build_emoji_regexp(previous_conf)
 
@@ -321,20 +417,6 @@ module Jekyll
       end
 
       ##
-      # Convert `unicode` string into a `"HHHH-HHHH"` string, which represents
-      # the codepoints of the unicode string, but only if `unicode`
-      # is a valid emoji.
-      #
-      #
-      # @param [String] unicode
-      # @return [String]
-      #
-      def unicode_to_codepoints(unicode)
-        return unicode unless @encoding_map.key? unicode
-        unicode.codepoints.map {|cp| cp.to_s 16}.join('-')
-      end
-
-      ##
       # Convert `codepoints` into an unicode string.
       #
       # @param [String|Array] codepoints
@@ -371,16 +453,16 @@ module Jekyll
         return docstr
       end # convert
 
-      def self.site_conf
-        @@site_conf
+      def initial_conf
+        @initial_conf
       end
 
       private :load_emoji_json, :load_emoji_data
       private :validate_format
-      private :build_emoji_regexp
+      private :build_emoji_regexp, :build_encoding_regexp
       private :process_node
       private :emojione_img_node, :split_to_nodes
-      private :unicode_to_codepoints, :codepoints_to_unicode
+      private :codepoints_to_unicode
     end #Converter
   end #Emoji
 end

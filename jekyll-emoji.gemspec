@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{
     A plug-n-play Jekyll plugin to enable emoji support in your site.
 
-    See documentation for more inforamtion on how to use it.
+    See documentation for more information on how to use it.
   }
   spec.homepage      = "https://github.com/omninonsense/jekyll-emoji"
   spec.license       = "MIT"

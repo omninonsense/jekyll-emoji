@@ -36,7 +36,9 @@ emoji:
 
 The following formats are supported: `html`, `unicode`, `emojione-png`, and ` emojione-svg`.
 
-For a list of all available shortnames and asciimojis (I hope I coined this, so I can be cool) you can consult the [emoji.codes](http://emoji.codes), [Emoji One](http://emojione.com), and [Emoji Cheat Sheet](http://www.emoji-cheat-sheet.com/) websites.
+For a list of all available shortnames and asciimojis (I hope I coined this, so I can be cool) you can consult the [emoji.codes](http://emoji.codes),
+[Emoji One](http://emojione.com), and
+[Emoji Cheat Sheet](http://www.emoji-cheat-sheet.com/) websites.
 
 Elements matching the following (CSS selector) will be excluded from the emojification:
 

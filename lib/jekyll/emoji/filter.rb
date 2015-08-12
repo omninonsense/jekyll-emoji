@@ -13,13 +13,15 @@ module Jekyll
       # @return [String]
       #
       def emojify(input, output_format = nil, ascii = nil, shortname = nil)
-        @@emoji_converter ||= Converter.new(Converter.site_conf)
-        @@emoji_converter.reconfigure('format' => output_format, 'ascii' => ascii, 'shortname' => shortname)
+        # Liquid/Jekyll seem to re-create the class where filters are included
+        @@__emoji_converter__ ||= Converter.new(@context.registers[:site].config)
+        @@__emoji_converter__.reconfigure('format' => output_format, 'ascii' => ascii, 'shortname' => shortname)
 
-        output = @@emoji_converter.convert(input)
+        output = @@__emoji_converter__.convert(input)
 
+        # Revert back to old configuration
         # NOTE: This impacts performance in certain cases
-        @@emoji_converter.reconfigure(Converter.site_conf)
+        @@__emoji_converter__.reconfigure(@@__emoji_converter__.initial_conf)
 
         return output
       end
