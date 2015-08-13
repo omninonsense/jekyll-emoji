@@ -187,8 +187,8 @@ module Jekyll
       #   conv = Converter.new()
       #   conv.add_shortname_alias(":wink:", '1F609')
       #
-      # @param [String] k
-      # @param [String] v
+      # @param [String] emoji_alias
+      # @param [String] codepoints
       # @return [FalseClass|TrueClass]
       #
       def add_shortname_alias(emoji_alias, codepoints)
@@ -209,8 +209,8 @@ module Jekyll
       #   conv = Converter.new()
       #   conv.add_shortname_alias(";-)", '1F609')
       #
-      # @param [String] k
-      # @param [String] v
+      # @param [String] emoji_alias
+      # @param [String] codepoints
       # @return [FalseClass|TrueClass]
       #
       def add_ascii_alias(emoji_alias, codepoints)
