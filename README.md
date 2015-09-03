@@ -96,3 +96,14 @@ It was &lt;3&gt;&lt;/3&gt; at first sight!
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+
+### Emoji One License
+
+If you use `emojione-png`, or ` emojione-svg`, note that the artwork is licensed under under a CC-BY-SA 4.0 International license, and you're required to include the following attribution:
+
+~~~markdown
+[Emoji One artwork][emojione] is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License][cc-by-sa].
+
+[emojione]: http://emojione.com/
+[cc-by-sa]: http://creativecommons.org/licenses/by-sa/4.0/
+~~~
