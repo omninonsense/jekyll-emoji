@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Nino Miletich"]
   spec.email         = ["nino@miletich.me"]
 
-  spec.required_ruby_version = '>= 1.9', '~> 2.3'
+  spec.required_ruby_version = '>= 2.0', '~> 2.3'
 
   spec.summary       = %q{Adds support for emojis to Jekyll}
   spec.description   = %q{
