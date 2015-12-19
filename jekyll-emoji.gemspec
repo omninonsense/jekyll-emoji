@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Nino Miletich"]
   spec.email         = ["nino@miletich.me"]
 
-  spec.required_ruby_version = '>= 1.9', '~> 2.2'
+  spec.required_ruby_version = '>= 1.9', '~> 2.3'
 
   spec.summary       = %q{Adds support for emojis to Jekyll}
   spec.description   = %q{
@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "minitest", "~> 5.8"
 
-  spec.add_dependency "jekyll", "~> 2.0"
+  spec.add_dependency "jekyll", ">= 2.0", "~> 3.0"
   spec.add_dependency "yajl-ruby", "~> 1.2", '>= 1.2.0'
   spec.add_dependency "oga", "~> 1.2", '>= 1.2.0'
 end
