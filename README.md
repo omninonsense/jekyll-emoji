@@ -99,4 +99,4 @@ The gem is available as open source under the terms of the [MIT License](http://
 
 ### Emoji One License
 
-If you use `emojione-png`, or `emojione-svg`, note that the artwork is licensed under a CC-BY-SA 4.0 International License and its use requires attribution. Details on the attribution and license can be found on their [website](http://emojione.com/developers).
+If you use `emojione-png`, or `emojione-svg`, note that the artwork is licensed under a CC-BY 4.0 International License and its use requires attribution. Details on the attribution and license can be found on [emojione.com/licensing](http://emojione.com/licensing).
