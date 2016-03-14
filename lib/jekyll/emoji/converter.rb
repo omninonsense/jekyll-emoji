@@ -413,14 +413,16 @@ module Jekyll
       # @param [String|Array] codepoints
       # @return [Oga::XML::Element(name:svg)]
       def emojione_svg_embed_node(codepoints)
-        if @conf['src']
-          data = File.open("#{@conf['src'].chomp('/')}/#{codepoints}.svg")
-        else
+        base = @conf['src'] || "https://cdn.jsdelivr.net/emojione/assets/svg"
+
+        if base =~ /^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$/ix
           data = Enumerator.new do |yielder|
-            HTTPClient.get("https://cdn.jsdelivr.net/emojione/assets/svg/#{codepoints}.svg") do |chunk|
+            HTTPClient.get("#{base.chomp('/')}/#{codepoints}.svg") do |chunk|
               yielder << chunk
             end
           end
+        else
+          data = File.open("#{base.chomp('/')}/#{codepoints}.svg")
         end
         img = Oga.parse_xml(data).children[0]
         img.set('class', 'emojione')
