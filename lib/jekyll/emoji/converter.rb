@@ -388,13 +388,22 @@ module Jekyll
       #
       def emojione_img_node(codepoints)
         ext = @conf['format'].split('-').last
-        img_src = @conf['src'] ||= "https://cdn.jsdelivr.net/emojione/assets/#{ext}"
+        img_src = @conf['src'] || "https://cdn.jsdelivr.net/emojione/assets/#{ext}"
         img = Oga::XML::Element.new name: 'img'
         img.set('class', 'emojione')
         img.set('alt', codepoints_to_unicode(codepoints))
         img.set('src', "#{img_src}/#{codepoints}.#{ext}")
 
         return img
+      end
+
+      ##
+      # Generates a populated {Oga::XML::Element} node.
+      #
+      # @param [String|Array] codepoints
+      # @return [Oga::XML::Element(name:svg)]
+      def emojione_svg_embed_node(codepoints)
+        svg_src = @conf['src'] || "https://cdn.jsdelivr.net/emojione/assets/#{ext}"
       end
 
       ##
