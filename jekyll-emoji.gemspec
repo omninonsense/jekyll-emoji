@@ -30,4 +30,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "jekyll", ">= 2.0"
   spec.add_dependency "yajl-ruby", "~> 1.2", '>= 1.2.0'
   spec.add_dependency "oga", "~> 1.2", '>= 1.2.0'
+  spec.add_dependency "httpclient", ">=2.7"
 end
