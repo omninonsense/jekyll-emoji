@@ -32,9 +32,16 @@ emoji:
   format: emojione-svg # default html
   ascii: true # default false
   shortname: true # default true
+  src: "/assets/imgs/emojis" # defaults to "https://cdn.jsdelivr.net/emojione/assets/#{ext}"
 ~~~
 
-The following formats are supported: `html`, `unicode`, `emojione-png`, and ` emojione-svg`.
+The following formats are supported: `html`, `unicode`, `emojione-png`, ` emojione-svg`, and `emojione-svg-embed`.
+
+The `src` attribute can be used to point to a location of the set of emojis that are named the same way the EmojiOne images are, eg `https://cdn.jsdelivr.net/emojione/assets/#{ext}/#{unicode}.#{ext}`. When using it with `emojione-png` or `emojione-svg`, the `<img>` src will point to images at this location.  
+
+For example, `src: "/assets/images/emojis"` will produce `<img>` tags similar to `<img class="emojione" alt="🍺" src="/assets/imgs/emojis/1f37a.svg">` whilst `src: "https://twemoji.maxcdn.com/svg"` will produce `<img>` tags similar to `<img class="emojione" alt="🍺" src="https://twemoji.maxcdn.com/svg/1f37a.svg">` using Twemoji's CDN-hosted images.
+
+When used with `emojione-svg-embed`, the SVG in the file at this location will be embedded into your content.
 
 For a list of all available shortnames and asciimojis (I hope I coined this, so I can be cool) you can consult the [emoji.codes](http://emoji.codes),
 [Emoji One](http://emojione.com), and
@@ -61,6 +68,8 @@ There's also a Liquid filter called `emojify`. It accepts three parameters: `for
 ### `emojify` filter performance
 
 The `emojify` filter deteriorates performance *a little* under very *specific* conditions; it shouldn't be an issue, but in case you see performance degradation when generating the site&mdash;start with this.
+
+The `emojify` filter will result in a drop in site generation performance if you specific a `src` that points to a URL as the content of each SVG will need to be downloaded from that location.
 
 ### `emojify` filter unawareness
 
