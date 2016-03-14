@@ -12,7 +12,8 @@ module Jekyll
       DEFAULTS = {
         'format' => 'html',
         'ascii' => false,
-        'shortname' => true
+        'shortname' => true,
+        'src' => nil
       }.freeze
 
       BLACKLIST_ATTRIBUTES = %w{
