@@ -1,6 +1,7 @@
 require "jekyll/emoji/version"
 require 'oga'
 require 'yajl'
+require 'HTTPClient'
 
 module Jekyll
   module Emoji
@@ -361,19 +362,28 @@ module Jekyll
           codepoints = @emoji_map[m]
 
           case @conf['format']
-          when 'unicode', 'html'
-            codepoints_to_unicode(codepoints)
-          when 'emojione-png', 'emojione-svg'
-            before, after = split_to_nodes(str, m)
-            img = emojione_img_node(codepoints)
+            when 'unicode', 'html'
+              codepoints_to_unicode(codepoints)
+            when 'emojione-png', 'emojione-svg'
+              before, after = split_to_nodes(str, m)
+              img = emojione_img_node(codepoints)
 
-            if node.node_set
-              node.before(before)
-              node.after(after)
-              node.replace img
-            end
+              if node.node_set
+                node.before(before)
+                node.after(after)
+                node.replace img
+              end
+            when 'emojione-svg-embed'
+              before, after = split_to_nodes(str, m)
+              img = emojione_svg_embed_node(codepoints)
 
-            return nil
+              if node.node_set
+                node.before(before)
+                node.after(after)
+                node.replace img
+              end
+
+              return nil
           end
         end
 
@@ -403,7 +413,20 @@ module Jekyll
       # @param [String|Array] codepoints
       # @return [Oga::XML::Element(name:svg)]
       def emojione_svg_embed_node(codepoints)
-        svg_src = @conf['src'] || "https://cdn.jsdelivr.net/emojione/assets/#{ext}"
+        if @conf['src']
+          data = File.open("#{@conf['src']}/#{codepoints}.svg")
+        else
+          data = Enumerator.new do |yielder|
+            HTTPClient.get("https://cdn.jsdelivr.net/emojione/assets/svg/#{codepoints}.svg") do |chunk|
+              yielder << chunk
+            end
+          end
+        end
+        img = Oga.parse_xml(data).children[0]
+        img.set('class', 'emojione')
+        img.set('alt', codepoints_to_unicode(codepoints))
+
+        return img
       end
 
       ##
