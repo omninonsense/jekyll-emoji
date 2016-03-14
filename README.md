@@ -37,7 +37,7 @@ emoji:
 
 The following formats are supported: `html`, `unicode`, `emojione-png`, ` emojione-svg`, and `emojione-svg-embed`.
 
-The `src` attribute can be used to point to a location of the set of emojis that are named the same way the EmojiOne images are, eg `https://cdn.jsdelivr.net/emojione/assets/#{ext}/#{unicode}.#{ext}`. When using it with `emojione-png` or `emojione-svg`, the `<img>` src will point to images at this location.  
+The `src` attribute can only be used with `emojione-png`, ` emojione-svg`, and `emojione-svg-embed` and can be used to point to a location of a set of emojis that are named the same way the EmojiOne images are, eg `https://cdn.jsdelivr.net/emojione/assets/#{ext}/#{unicode}.#{ext}`. When using it with `emojione-png` or `emojione-svg`, the `<img>` src will point to images at this location.  
 
 For example, `src: "/assets/images/emojis"` will produce `<img>` tags similar to `<img class="emojione" alt="🍺" src="/assets/imgs/emojis/1f37a.svg">` whilst `src: "https://twemoji.maxcdn.com/svg"` will produce `<img>` tags similar to `<img class="emojione" alt="🍺" src="https://twemoji.maxcdn.com/svg/1f37a.svg">` using Twemoji's CDN-hosted images.
 
