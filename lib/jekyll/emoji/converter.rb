@@ -1,7 +1,7 @@
 require "jekyll/emoji/version"
 require 'oga'
 require 'yajl'
-require 'HTTPClient'
+require 'httpclient'
 
 module Jekyll
   module Emoji
