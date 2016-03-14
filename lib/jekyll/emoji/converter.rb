@@ -414,7 +414,7 @@ module Jekyll
       # @return [Oga::XML::Element(name:svg)]
       def emojione_svg_embed_node(codepoints)
         if @conf['src']
-          data = File.open("#{@conf['src']}/#{codepoints}.svg")
+          data = File.open("#{@conf['src'].chomp('/')}/#{codepoints}.svg")
         else
           data = Enumerator.new do |yielder|
             HTTPClient.get("https://cdn.jsdelivr.net/emojione/assets/svg/#{codepoints}.svg") do |chunk|
