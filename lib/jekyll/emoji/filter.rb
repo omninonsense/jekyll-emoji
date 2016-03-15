@@ -10,7 +10,7 @@ module Jekyll
       # @param [String] output_format
       # @param [FalseClass|TrueClass|NilClass] ascii
       # @param [FalseClass|TrueClass|NilClass] shortname
-      # @param [FalseClass|TrueClass|NilClass] src
+      # @param [String|NilClass] src
       # @return [String]
       #
       def emojify(input, output_format = nil, ascii = nil, shortname = nil, src = nil)
