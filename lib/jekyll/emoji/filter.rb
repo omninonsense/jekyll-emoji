@@ -10,12 +10,13 @@ module Jekyll
       # @param [String] output_format
       # @param [FalseClass|TrueClass|NilClass] ascii
       # @param [FalseClass|TrueClass|NilClass] shortname
+      # @param [String|NilClass] src
       # @return [String]
       #
-      def emojify(input, output_format = nil, ascii = nil, shortname = nil)
+      def emojify(input, output_format = nil, ascii = nil, shortname = nil, src = nil)
         # Liquid/Jekyll seem to re-create the class where filters are included
         @@__emoji_converter__ ||= Converter.new(@context.registers[:site].config)
-        @@__emoji_converter__.reconfigure('format' => output_format, 'ascii' => ascii, 'shortname' => shortname)
+        @@__emoji_converter__.reconfigure('format' => output_format, 'ascii' => ascii, 'shortname' => shortname, 'src' => src)
 
         output = @@__emoji_converter__.convert(input)
 

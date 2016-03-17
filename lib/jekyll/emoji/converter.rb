@@ -1,6 +1,7 @@
 require "jekyll/emoji/version"
 require 'oga'
 require 'yajl'
+require 'httpclient'
 
 module Jekyll
   module Emoji
@@ -11,7 +12,8 @@ module Jekyll
       DEFAULTS = {
         'format' => 'html',
         'ascii' => false,
-        'shortname' => true
+        'shortname' => true,
+        'src' => nil
       }.freeze
 
       BLACKLIST_ATTRIBUTES = %w{
@@ -37,6 +39,7 @@ module Jekyll
         unicode
         emojione-png
         emojione-svg
+        emojione-svg-embed
       }
 
       EMOJI_JSON_FILE = '../../../../emoji.json'
@@ -360,19 +363,28 @@ module Jekyll
           codepoints = @emoji_map[m]
 
           case @conf['format']
-          when 'unicode', 'html'
-            codepoints_to_unicode(codepoints)
-          when 'emojione-png', 'emojione-svg'
-            before, after = split_to_nodes(str, m)
-            img = emojione_img_node(codepoints)
+            when 'unicode', 'html'
+              codepoints_to_unicode(codepoints)
+            when 'emojione-png', 'emojione-svg'
+              before, after = split_to_nodes(str, m)
+              img = emojione_img_node(codepoints)
 
-            if node.node_set
-              node.before(before)
-              node.after(after)
-              node.replace img
-            end
+              if node.node_set
+                node.before(before)
+                node.after(after)
+                node.replace img
+              end
+            when 'emojione-svg-embed'
+              before, after = split_to_nodes(str, m)
+              img = emojione_svg_embed_node(codepoints)
 
-            return nil
+              if node.node_set
+                node.before(before)
+                node.after(after)
+                node.replace img
+              end
+
+              return nil
           end
         end
 
@@ -387,10 +399,35 @@ module Jekyll
       #
       def emojione_img_node(codepoints)
         ext = @conf['format'].split('-').last
+        img_src = @conf['src'] || "https://cdn.jsdelivr.net/emojione/assets/#{ext}"
         img = Oga::XML::Element.new name: 'img'
         img.set('class', 'emojione')
         img.set('alt', codepoints_to_unicode(codepoints))
-        img.set('src', "https://cdn.jsdelivr.net/emojione/assets/#{ext}/#{codepoints}.#{ext}")
+        img.set('src', "#{img_src}/#{codepoints}.#{ext}")
+
+        return img
+      end
+
+      ##
+      # Generates a populated {Oga::XML::Element} node.
+      #
+      # @param [String|Array] codepoints
+      # @return [Oga::XML::Element(name:svg)]
+      def emojione_svg_embed_node(codepoints)
+        base = @conf['src'] || "https://cdn.jsdelivr.net/emojione/assets/svg"
+
+        if base =~ /^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$/ix
+          data = Enumerator.new do |yielder|
+            HTTPClient.get("#{base.chomp('/')}/#{codepoints}.svg") do |chunk|
+              yielder << chunk
+            end
+          end
+        else
+          data = File.open("#{base.chomp('/')}/#{codepoints}.svg")
+        end
+        img = Oga.parse_xml(data).children[0]
+        img.set('class', 'emojione')
+        img.set('alt', codepoints_to_unicode(codepoints))
 
         return img
       end
